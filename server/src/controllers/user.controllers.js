@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 // This function creates a new user in the database
-createUser = async (req, res) => {
+async function createUser(req, res) {
     // Check if the user already exists
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -21,11 +21,11 @@ createUser = async (req, res) => {
             message: error.message || 'Something went wrong'
         });
     }
-};
+}
 
-// This function retrieves all users from the database
+// This function retrieves all users from the data                                                                base
 // and returns them in a JSON format
-getUsers = async (req, res) => {
+const getUsers = async (req, res) => {
     try {
         const users = await User.find();
         const result = users.map((user) => {
@@ -34,7 +34,6 @@ getUsers = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 isAdmin: user.isAdmin,
-                password: user.password
             };
         });
         res.status(200).json(result);
@@ -48,7 +47,7 @@ getUsers = async (req, res) => {
 // This function retrieves a user by ID from the database
 // and returns it in a JSON format
 
-getUserById = async (req, res) => {
+const getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) {
@@ -68,10 +67,16 @@ getUserById = async (req, res) => {
 };
 
 // This function updates a user by ID in the database
-updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
     // Check if the user exists
     // and update the user information
     try {
+        // Hash the new password if provided
+        let hashedPassword;
+        if (req.body.password) {
+            hashedPassword = await bcrypt.hash(req.body.password, 10);
+        }   
+
         const user = await User.findByIdAndUpdate(
             req.params.id,
             {
@@ -101,7 +106,7 @@ updateUser = async (req, res) => {
 };
 
 // This function delete a user by ID in the database
-deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
     // Check if the user exists
     try {
         const user = await User.findByIdAndDelete(req.params.id);
@@ -118,56 +123,12 @@ deleteUser = async (req, res) => {
     }
 };
 
-// This function handles user login
-loginUser = async (req, res) => {
-    try {
-        //find user by email
-        const user = await User.findOne({ email: req.body.email });
+// Export all the functions as an object
 
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        // Compare the provided password with the hashed password in the database
-        const isPasswordCorrect = await bcrypt.compare(
-            req.body.password,
-            user.password
-        );
-
-        if (!isPasswordCorrect) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-
-        // Generate JWT token
-        // The token contains the user's ID and admin status
-        const token = jwt.sign(
-            { id: user._id, isAdmin: user.isAdmin },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
-
-        // Return the user data and token in the response
-
-        res.status(200).json({
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            isAdmin: user.isAdmin,
-            token: token
-        });
-    } catch (error) {
-        // Handle errors and return a 500 status code with an error message
-        res.status(500).json({
-            message: error.message || 'Something went wrong'
-        });
-    }
-};
-
-export default {
+export {
     createUser,
     getUsers,
     getUserById,
     updateUser,
     deleteUser,
-    loginUser
 };
