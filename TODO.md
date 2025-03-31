@@ -1,3 +1,3 @@
-- implement an input validator
+- implement an input validator with zod
 - fix login cookies
 - 

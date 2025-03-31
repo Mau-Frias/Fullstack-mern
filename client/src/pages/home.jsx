@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-            <h1>Welcome to the Home Page</h1>
-            <div style={{ marginTop: '20px' }}>
-                <Link to="/login" style={{ marginRight: '10px', color: '#007BFF', textDecoration: 'none' }}>
+        <div className="flex flex-col items-center justify-center h-screen">
+            <h1 className="text-2xl font-bold">Welcome to the Home Page</h1>
+            <div className="mt-5">
+                <Link to="/login" className="mr-3 text-blue-500 hover:underline">
                     Login
                 </Link>
-                <Link to="/register" style={{ color: '#007BFF', textDecoration: 'none' }}>
+                <Link to="/register" className="text-blue-500 hover:underline">
                     Register
                 </Link>
             </div>

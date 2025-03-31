@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import useLoginState from '../hooks/useLoginState'; // Import the custom hook
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { loggedIn, setLoggedIn } = useLoginState(); // Use the custom hook
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -16,50 +18,73 @@ const Login = () => {
         })
             .then((response) => {
                 if (response.ok) {
+                    alert('Login successful!');
                     return response.json();
                 }
+                alert('Login failed!');
                 throw new Error('Network response was not ok.');
             })
             .then((data) => {
                 console.log('Login successful:', data);
-                // Handle successful login (e.g., redirect to dashboard)
+                setLoggedIn(true); // Update login status
             })
             .catch((error) => {
                 console.error('There was a problem with the fetch operation:', error);
             });
     };
 
+    if (loggedIn) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <h2 className="text-lg font-bold">You are already logged in!</h2>
+                <Link to="/" className="text-blue-500 hover:underline mt-4">
+                    Go to Home
+                </Link>
+            </div>
+        );
+    }
+
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <form onSubmit={handleSubmit} style={{ width: '300px', padding: '20px', border: '1px solid #ccc', borderRadius: '5px' }}>
-                <h2>Login</h2>
-                <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="email" style={{ display: 'block', marginBottom: '5px' }}>Email</label>
+        <div className="flex justify-center items-center h-screen">
+            <form
+                onSubmit={handleSubmit}
+                className="w-72 p-5 border border-gray-300 rounded-md"
+            >
+                <h2 className="text-lg font-bold mb-4">Login</h2>
+                <div className="mb-4">
+                    <label htmlFor="email" className="block mb-1">
+                        Email
+                    </label>
                     <input
                         type="email"
                         id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+                        className="w-full p-2 border border-gray-300 rounded"
                         required
                     />
                 </div>
-                <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="password" style={{ display: 'block', marginBottom: '5px' }}>Password</label>
+                <div className="mb-4">
+                    <label htmlFor="password" className="block mb-1">
+                        Password
+                    </label>
                     <input
                         type="password"
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+                        className="w-full p-2 border border-gray-300 rounded"
                         required
                     />
                 </div>
-                <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: '#007BFF', color: '#fff', border: 'none', borderRadius: '5px' }}>
+                <button
+                    type="submit"
+                    className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
                     Login
                 </button>
-                <div style={{ textAlign: 'center', marginTop: '10px' }}>
-                    <Link to="/" style={{ color: '#007BFF', textDecoration: 'none' }}>
+                <div className="text-center mt-3">
+                    <Link to="/" className="text-blue-500 hover:underline">
                         Back to Home
                     </Link>
                 </div>

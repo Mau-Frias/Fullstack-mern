@@ -4,10 +4,10 @@ function Layout({ children }) {
     return (
         <div>
             <Navbar />
-            <main style={{ padding: '20px' }}>
+            <main className="p-5">
                 {children}
             </main>
-            <footer style={{ textAlign: 'center', marginTop: '20px' }}>
+            <footer className="text-center mt-5">
                 © 2023 MyApp. All rights reserved.
             </footer>
         </div>
