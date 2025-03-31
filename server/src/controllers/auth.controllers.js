@@ -31,14 +31,19 @@ const loginUser = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        // Return the user data and token in the response
+        // Set the token as a cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 3600000, // 1 hour
+        });
 
+        // Return the user data in the response
         res.status(200).json({
             id: user._id,
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
-            token: token
         });
     } catch (error) {
         // Handle errors and return a 500 status code with an error message
@@ -49,7 +54,6 @@ const loginUser = async (req, res) => {
 };
 
 // This function handles user registration
-
 const registerUser = async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -69,4 +73,10 @@ const registerUser = async (req, res) => {
     }
 };
 
-export { loginUser, registerUser };
+// Add a logout function to clear the cookie
+const logoutUser = (req, res) => {
+    res.clearCookie('token');
+    res.status(200).json({ message: 'Logged out successfully' });
+};
+
+export { loginUser, registerUser, logoutUser };

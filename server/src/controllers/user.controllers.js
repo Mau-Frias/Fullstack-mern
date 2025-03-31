@@ -1,9 +1,8 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 // This function creates a new user in the database
-async function createUser(req, res) {
+const createUser = async (req, res) => {
     // Check if the user already exists
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
