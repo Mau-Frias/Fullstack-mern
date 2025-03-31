@@ -1,0 +1,3 @@
+- implement an input validator
+- fix login cookies
+- 

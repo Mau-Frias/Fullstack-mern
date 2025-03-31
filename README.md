@@ -89,8 +89,8 @@ This is a full-stack application built with Node.js for the backend and React fo
 ns/
 ├── client/                # Frontend code
 │   ├── src/
-│   │   ├── pages/         # React pages (e.g., Login)
-│   │   ├── components/    # Reusable components
+│   │   ├── pages/         # React pages (e.g., Login, Register, Home)
+│   │   ├── components/    # Reusable components (e.g., Layout)
 │   │   └── App.js         # Main React app
 ├── server/                # Backend code
 │   ├── src/
