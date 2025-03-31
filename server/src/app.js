@@ -5,9 +5,11 @@ import cors from 'cors';
 import userRoutes from './routes/user.routes.js';
 import authRoutes from './routes/auth.routes.js';
 
+console.log('Initializing Express app'); // Debug log
 
 const app = express();
 
+console.log('Setting up middleware'); // Debug log
 app.use(cors({
     origin: "*" ,
     // origin: (origin, callback) => {
@@ -20,11 +22,24 @@ app.use(cors({
     // },
     credentials: true,
 }));
-app.use(express.json());
-app.use(morgan('dev'));
-app.use(cookieParser());
+console.log('CORS middleware configured'); // Debug log
 
+app.use(express.json());
+console.log('JSON body parser middleware configured'); // Debug log
+
+app.use(morgan('dev'));
+console.log('Morgan logging middleware configured'); // Debug log
+
+app.use(cookieParser());
+console.log('Cookie parser middleware configured'); // Debug log
+
+console.log('Setting up routes'); // Debug log
 app.use('/api/users', userRoutes);
+console.log('User routes configured'); // Debug log
+
 app.use('/api/auth', authRoutes);
+console.log('Auth routes configured'); // Debug log
+
+console.log('Express app initialized'); // Debug log
 
 export default app;
